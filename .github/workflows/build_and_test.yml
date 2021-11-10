@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, develop ]
 
 jobs:
   build:
@@ -22,17 +22,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./test/CustomerClassLibrary.Tests/TestResults/
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.4
-      with:
-        name: coverage.opencover.xml
-        path: ./test/CustomerClassLibrary.Tests/TestResults/
-    - uses: codecov/codecov-action@v1
-      with:
-        token: a110fb54-266d-4d1f-a918-a0d63b13c0a5
-        files: ./test/CustomerClassLibrary.Tests/TestResults/coverage.opencover.xml
-        flags: unittests 
-        name: codecov-umbrella
-        fail_ci_if_error: true 
-        verbose: true
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+    - name: Codecov upload
+      uses: codecov/codecov-action@v2
