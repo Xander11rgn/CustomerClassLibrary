@@ -22,15 +22,15 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=TestResults/
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./test/CustomerClassLibrary.Tests/TestResults/
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.4
       with:
-        path: coverage.opencover.xml
+        path: ./test/CustomerClassLibrary.Tests/TestResults/
     - uses: codecov/codecov-action@v1
       with:
         token: a110fb54-266d-4d1f-a918-a0d63b13c0a5
-        files: CustomerClassLibrary/test/CustomerClassLibrary.Tests/TestResults/coverage.opencover.xml
+        files: ./test/CustomerClassLibrary.Tests/TestResults/coverage.opencover.xml
         flags: unittests 
         name: codecov-umbrella
         fail_ci_if_error: true 
