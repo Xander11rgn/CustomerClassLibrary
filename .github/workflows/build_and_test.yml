@@ -23,6 +23,11 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=CustomerClassLibrary/test/CustomerClassLibrary.Tests/TestResults/
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.4
+      with:
+        name: coverage.opencover.xml
+        path: CustomerClassLibrary/test/CustomerClassLibrary.Tests/TestResults/
     - uses: codecov/codecov-action@v1
       with:
         token: a110fb54-266d-4d1f-a918-a0d63b13c0a5
