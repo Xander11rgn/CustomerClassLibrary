@@ -7,84 +7,88 @@ namespace CustomerClassLibrary.Tests
 {
     public class CustomerValidatorTests
     {
-        Address address = new Address("adwd", "awdad", AddressType.Billing, "feaf", "167023", "qqwd", "Canada");
-        [Fact]
-        public void ShouldReturnCorrectResultFirstNameWithoutValue()
-        {
-            Customer customer = new Customer("", "awdaw", new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { "dwada" }, 5646.4);
-            Assert.Equal(new List<string> { }, CustomerValidator.Validate(customer));
-        }
+        CustomerValidator customerValidator = new CustomerValidator();
+        Address address = new Address("awdaw", "wdada", AddressType.Billing, "wadaw", "167023", "wdad", "Canada");
 
         [Fact]
-        public void ShouldReturnCorrectResultFirstNameValueOver50()
+        public void ShouldBeAbleToCreateCustomerValidatorObject()
+        {
+            AddressValidator addressValidator = new AddressValidator();
+            Assert.NotNull(addressValidator);
+        }
+
+        
+        [Fact]
+        public void ShouldReturnCorrectResultFirstNameOver50()
         {
             var str = new StringBuilder();
             str.Length = 51;
-            Customer customer = new Customer(str.ToString(), "awdaw", new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { "dwada" }, 5646.4);
-            Assert.Equal(new List<string> { "The maximum length of 'First Name' is 50 characters" }, CustomerValidator.Validate(customer));
+            Customer customer = new Customer(str.ToString(), "wdadawd", new List<Address> { address }, "+846486", "awda@adw.afa", new List<string> { "dwada" }, 5464.20);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Equal("The maximum length of 'First Name' is 50 characters", result[0].ErrorMessage);
         }
 
 
         [Fact]
-        public void ShouldReturnCorrectResultLastNameWithoutValue()
+        public void ShouldReturnCorrectResultLastNameEmpty()
         {
-            Customer customer = new Customer("adwad", "", new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { "dwada" }, 5646.4);
-            Assert.Equal(new List<string> { "Last Name is REQUIRED" }, CustomerValidator.Validate(customer));
+            Customer customer = new Customer("dwada", "", new List<Address> { address }, "+846486", "awda@adw.afa", new List<string> { "dwada" }, 5464.20);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Equal("Last Name is REQUIRED", result[0].ErrorMessage);
         }
 
         [Fact]
-        public void ShouldReturnCorrectResultLastNameValueOver50()
+        public void ShouldReturnCorrectResultLastNameOver50()
         {
             var str = new StringBuilder();
             str.Length = 51;
-            Customer customer = new Customer("awdaa", str.ToString(), new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { "dwada" }, 5646.4);
-            Assert.Equal(new List<string> { "The maximum length of 'Last Name' is 50 characters" }, CustomerValidator.Validate(customer));
+            Customer customer = new Customer("dawdw", str.ToString(), new List<Address> { address }, "+846486", "awda@adw.afa", new List<string> { "dwada" }, 5464.20);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Equal("The maximum length of 'Last Name' is 50 characters", result[0].ErrorMessage);
         }
 
 
         [Fact]
         public void ShouldReturnCorrectResultAddressesListEmpty()
         {
-            Customer customer = new Customer("adwad", "adawa", new List<Address> { }, "+8489984", "awd@dwad.dwda", new List<string> { "dwada" }, 5646.4);
-            Assert.Equal(new List<string> { "There should be at least 1 address" }, CustomerValidator.Validate(customer));
+            Customer customer = new Customer("dawdw", "dwadwad", new List<Address> { }, "+846486", "awda@adw.afa", new List<string> { "dwada" }, 5464.20);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Equal("There should be at least 1 address", result[0].ErrorMessage);
         }
 
-        [Theory]
-        [InlineData("+4897878498498765156489784")]
-        [InlineData("+22a239f7e84")]
-        [InlineData("+")]
-        public void ShouldReturnCorrectResultIncorrectPhoneFormat(string value)
+
+        [Fact]
+        public void ShouldReturnCorrectResultIncorrectPhone()
         {
-            Customer customer = new Customer("adwad", "adawa", new List<Address> { address }, value, "awd@dwad.dwda", new List<string> { "dwada" }, 5646.4);
-            Assert.Equal(new List<string> { "Customer Phone Number is in the incorrect format (E.164)" }, CustomerValidator.Validate(customer));
+            Customer customer = new Customer("dawdw", "dwadwad", new List<Address> { address }, "+84awd6aw48w6", "awda@adw.afa", new List<string> { "dwada" }, 5464.20);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Equal("Customer Phone Number is in the incorrect format (E.164)", result[0].ErrorMessage);
         }
 
 
-        [Theory]
-        [InlineData("awdaw awd   awd  @awdaw . wwad")]
-        [InlineData("afaf@.awd")]
-        [InlineData("awdad@awdwad")]
-        public void ShouldReturnCorrectResultIncorrectMailFormat(string value)
+        [Fact]
+        public void ShouldReturnCorrectResultIncorrectMail()
         {
-            Customer customer = new Customer("adwad", "adawa", new List<Address> { address }, "+8489984", value, new List<string> { "dwada" }, 5646.4);
-            Assert.Equal(new List<string> { "Customer Mail is in the incorrect format (smth@smth.smth)" }, CustomerValidator.Validate(customer));
+            Customer customer = new Customer("dawdw", "dwadwad", new List<Address> { address }, "+846486", "aw   da @a dw.afa", new List<string> { "dwada" }, 5464.20);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Equal("Customer Mail is in the incorrect format (smth@smth.smth)", result[0].ErrorMessage);
         }
-
 
         [Fact]
         public void ShouldReturnCorrectResultNotesListEmpty()
         {
-            Customer customer = new Customer("adwad", "adawa", new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { }, 5646.4);
-            Assert.Equal(new List<string> { "There should be at least 1 note" }, CustomerValidator.Validate(customer));
+            Customer customer = new Customer("dawdw", "dwadwad", new List<Address> { address }, "+846486", "awda@adw.afa", new List<string> { }, 5464.20);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Equal("There should be at least 1 note", result[0].ErrorMessage);
         }
 
 
         [Fact]
-        public void ShouldReturnCorrectResultTotalPurchasesAmountIsNull()
+        public void ShouldReturnCorrectResultTotalPurchaseAmountNull()
         {
-            Customer customer = new Customer("adwad", "adawa", new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { }, null);
-            CustomerValidator.Validate(customer);
-            Assert.Equal(0, customer.TotalPurchasesAmount);
+            Customer customer = new Customer("dawdw", "dwadwad", new List<Address> { address }, "+846486", "awda@adw.afa", new List<string> { "rdgdrg" }, null);
+            var result = customerValidator.Validate(customer).Errors;
+            Assert.Empty(result);
         }
     }
 }

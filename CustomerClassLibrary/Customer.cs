@@ -50,7 +50,7 @@ namespace CustomerClassLibrary
         public double? TotalPurchasesAmount
         {
             get => _totalPurchasesAmount;
-            set => _totalPurchasesAmount = value;
+            set => _totalPurchasesAmount = (value == null) ? 0 : value;
         }
 
         public Customer(string firstName, string lastName, List<Address> addressesList, string customerPhoneNumber, string customerMail, List<string> notes, double? totalPurchasesAmount)

@@ -2,60 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using FluentValidation;
 
 namespace CustomerClassLibrary
 {
-    public class CustomerValidator
+    public class CustomerValidator : AbstractValidator<Customer>
     {
-        public static List<string> Validate(Customer customerObj)
+        public CustomerValidator()
         {
-            List<string> errors = new List<string>();
-
-            if (customerObj.FirstName.Length > 50)
-            {
-                errors.Add("The maximum length of 'First Name' is 50 characters");
-            }
-
-
-            if (customerObj.LastName.Length == 0)
-            {
-                errors.Add("Last Name is REQUIRED");
-            }
-            else if (customerObj.LastName.Length > 50)
-            {
-                errors.Add("The maximum length of 'Last Name' is 50 characters");
-            }
-
-
-            if (customerObj.AddressesList.Count == 0)
-            {
-                errors.Add("There should be at least 1 address");
-            }
-
-            
-            if (!Regex.IsMatch(customerObj.CustomerPhoneNumber, @"^\+\d{1,15}$"))
-            {
-                errors.Add("Customer Phone Number is in the incorrect format (E.164)");
-            }
-
-
-            if (!Regex.IsMatch(customerObj.CustomerMail, @"^\S+@\S+\.\S+$"))
-            {
-                errors.Add("Customer Mail is in the incorrect format (smth@smth.smth)");
-            }
-
-
-            if (customerObj.Notes.Count == 0)
-            {
-                errors.Add("There should be at least 1 note");
-            }
-
-            if (customerObj.TotalPurchasesAmount == null)
-            {
-                customerObj.TotalPurchasesAmount = 0;
-            }
-
-            return errors;
+            RuleFor(customer => customer.FirstName).MaximumLength(50).WithMessage("The maximum length of 'First Name' is 50 characters");
+            RuleFor(customer => customer.LastName).NotEmpty().WithMessage("Last Name is REQUIRED").MaximumLength(50).WithMessage("The maximum length of 'Last Name' is 50 characters");
+            RuleFor(customer => customer.AddressesList).NotEmpty().WithMessage("There should be at least 1 address");
+            RuleFor(customer => customer.CustomerPhoneNumber).Must(phone => Regex.IsMatch(phone, @"^\+\d{1,15}$")).WithMessage("Customer Phone Number is in the incorrect format (E.164)");
+            RuleFor(customer => customer.CustomerMail).Must(mail => Regex.IsMatch(mail, @"^\S+@\S+\.\S+$")).WithMessage("Customer Mail is in the incorrect format (smth@smth.smth)");
+            RuleFor(customer => customer.Notes).NotEmpty().WithMessage("There should be at least 1 note");
+            RuleFor(customer => customer.TotalPurchasesAmount).NotNull();
         }
     }
 }
