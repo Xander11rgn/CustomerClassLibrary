@@ -77,5 +77,14 @@ namespace CustomerClassLibrary.Tests
             Customer customer = new Customer("adwad", "adawa", new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { }, 5646.4);
             Assert.Equal(new List<string> { "There should be at least 1 note" }, CustomerValidator.Validate(customer));
         }
+
+
+        [Fact]
+        public void ShouldReturnCorrectResultTotalPurchasesAmountIsNull()
+        {
+            Customer customer = new Customer("adwad", "adawa", new List<Address> { address }, "+8489984", "awd@dwad.dwda", new List<string> { }, null);
+            CustomerValidator.Validate(customer);
+            Assert.Equal(0, customer.TotalPurchasesAmount);
+        }
     }
 }

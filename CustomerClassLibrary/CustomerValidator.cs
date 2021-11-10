@@ -50,6 +50,11 @@ namespace CustomerClassLibrary
                 errors.Add("There should be at least 1 note");
             }
 
+            if (customerObj.TotalPurchasesAmount == null)
+            {
+                customerObj.TotalPurchasesAmount = 0;
+            }
+
             return errors;
         }
     }

@@ -46,14 +46,14 @@ namespace CustomerClassLibrary
             set => _notes = value;
         }
 
-        private double _totalPurchasesAmount;
-        public double TotalPurchasesAmount
+        private double? _totalPurchasesAmount;
+        public double? TotalPurchasesAmount
         {
             get => _totalPurchasesAmount;
             set => _totalPurchasesAmount = value;
         }
 
-        public Customer(string firstName, string lastName, List<Address> addressesList, string customerPhoneNumber, string customerMail, List<string> notes, double totalPurchasesAmount)
+        public Customer(string firstName, string lastName, List<Address> addressesList, string customerPhoneNumber, string customerMail, List<string> notes, double? totalPurchasesAmount)
         {
             FirstName = firstName;
             LastName = lastName;
