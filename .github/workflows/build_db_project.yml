@@ -24,4 +24,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: DACPAC
-          path: ${{ github.workspace }}\bin\Release\
+          path: ${{ github.workspace }}\CustomerClassLibrary\CustomerClassLibrary.Database\bin\Release\
